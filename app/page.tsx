@@ -2,6 +2,7 @@ import { ProductGrid } from "@/components/products/ProductGrid";
 import { CategoryList } from "@/components/common/CategoryList";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+// import { getAllProducts } from "@/app/api";
 
 // async function getFeaturedProducts() {
 //   const res = await fetch(
@@ -14,6 +15,7 @@ import { Button } from "@/components/ui/button";
 async function getAllProducts() {
   const res = await fetch(`${process.env.STRAPI_URL}/api/products?populate=*`);
   const data = await res.json();
+  console.log(data);
   return data.data;
 }
 
@@ -48,19 +50,13 @@ export default async function Home() {
               </p>
               <Button size="lg">Ver productos</Button>
             </div>
-            {/* <img
-              src="/api/placeholder/600/400"
-              alt="Hero"
-              className="absolute right-0 top-0 h-full w-1/2 object-cover hidden md:block"
-            /> */}
           </CardContent>
         </Card>
       </section>
 
       {/* Categories */}
       <section className="py-8">
-        <h2 className="text-2xl font-bold mb-6">Categorías</h2>
-        <CategoryList categories={categories} />
+        <CategoryList title="Categorías" categories={categories} />
       </section>
 
       {/* Featured Products */}

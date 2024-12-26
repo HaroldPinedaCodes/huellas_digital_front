@@ -1,44 +1,85 @@
-import { Button } from "../ui/button";
-import { Card, CardContent, CardFooter } from "../ui/card";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
+import { Star } from "lucide-react";
+import { ProductCardProps } from "@/types/product"; // Asegúrate de tener esta importación
 
-interface ProductCardProps {
-  id: string;
-  name: string;
-  price: number;
-  image: { url: string }[];
-  slug: string;
-}
+const ProductCard = ({
+  name,
+  price,
+  image,
+  stock,
+  rating,
+  brand,
+  category,
+}: ProductCardProps) => {
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_UPLOAD_URL || "";
+  const imageUrl = image ? `${baseUrl}${image.url}` : "/placeholder.png";
 
-const ProductCard = ({ name, price, image, slug }: ProductCardProps) => {
-  // console.log(price);
+  console.log(imageUrl);
+  console.log(image);
 
-  const url = process.env.NEXT_PUBLIC_STRAPI_UPLOAD_URL;
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+    }).format(price);
+  };
 
-  console.log(image[0].url);
-  console.log(url + image[0].url);
-  console.log(price);
-
-  // const imageUrl = `${process.env.NEXT_PUBLIC_UPLOAD_URL}/${image[0].url}`;
-
-  console.log(url);
   return (
-    <Card className="overflow-hidden">
-      <Link href={`/products/${slug}`}>
-        <div className="relative h-48 w-full">
-          <Image src={url + image[0].url} alt={name} width={400} height={400} />
+    <Card className="group transition-all hover:shadow-lg">
+      <CardContent className="p-0">
+        <div className="relative aspect-square">
+          <Image
+            src={imageUrl}
+            alt={name}
+            width={300}
+            height={300}
+            className="object-contain p-4 transition-transform group-hover:scale-105"
+            priority
+          />
+          {stock <= 5 && stock > 0 && (
+            <span className="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded">
+              ¡Últimas unidades!
+            </span>
+          )}
+          {stock === 0 && (
+            <span className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+              Agotado
+            </span>
+          )}
         </div>
-      </Link>
 
-      <CardContent className="p-4">
-        <h3 className="font-medium">{name}</h3>
-        {/* <p className="mt-1 font-bold text-lg">${price.toFixed(2)}</p> */}
+        <div className="p-4">
+          <div className="mb-2">
+            <span className="text-xs text-muted-foreground">{brand.name}</span>
+            <h3 className="line-clamp-2 h-12 text-sm font-medium">{name}</h3>
+          </div>
+
+          <div className="flex items-center mb-2">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <Star
+                key={index}
+                className={`h-4 w-4 ${
+                  index < rating
+                    ? "text-yellow-400 fill-current"
+                    : "text-gray-300"
+                }`}
+              />
+            ))}
+          </div>
+
+          <div className="mt-2 flex justify-between items-center">
+            <div>
+              <p className="text-lg font-bold">{formatPrice(price)}</p>
+              <p className="text-xs text-muted-foreground">{category.name}</p>
+            </div>
+            <Button variant="outline" size="sm" disabled={stock === 0}>
+              {stock === 0 ? "Agotado" : "Añadir al carrito"}
+            </Button>
+          </div>
+        </div>
       </CardContent>
-
-      <CardFooter className="p-4 pt-0">
-        <Button className="w-full">Añadir al carrito</Button>
-      </CardFooter>
     </Card>
   );
 };

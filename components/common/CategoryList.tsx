@@ -1,5 +1,5 @@
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import Link from "next/link";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { CategoryItem } from "@/components/categories/CategoryItem";
 
 interface Category {
   id: string;
@@ -8,22 +8,37 @@ interface Category {
   image?: string;
 }
 
-const CategoryList = ({ categories }: { categories: Category[] }) => {
+interface CategoryListProps {
+  categories: Category[];
+  title?: string;
+}
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  image?: string;
+}
+
+const CategoryList = ({ categories, title }: CategoryListProps) => {
   return (
-    <div className="flex space-x-4 overflow-x-auto py-4">
-      {categories.map((category) => (
-        <Link
-          key={category.id}
-          href={`/category/${category.slug}`}
-          className="flex-shrink-0 text-center"
-        >
-          <Avatar className="w-24 h-24">
-            <AvatarImage src={category.image} alt={category.name} />
-            <AvatarFallback>{category.name[0]}</AvatarFallback>
-          </Avatar>
-          <span className="text-sm mt-2 block">{category.name}</span>
-        </Link>
-      ))}
+    <div className="space-y-4">
+      {title && (
+        <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
+      )}
+      <ScrollArea className="w-full whitespace-nowrap rounded-lg border">
+        <div className="flex  justify-between space-x-4 p-4">
+          {categories.map((category) => (
+            <CategoryItem
+              key={category.id}
+              name={category.name}
+              slug={category.slug}
+              image={category.image}
+              letter={category.name[0]}
+            />
+          ))}
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </div>
   );
 };
