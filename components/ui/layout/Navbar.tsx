@@ -1,3 +1,5 @@
+"use client";
+
 import { Search, ShoppingCart, User } from "lucide-react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
@@ -7,12 +9,16 @@ import {
   NavigationMenuItem,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
+import { useAuth } from "@/contexts/auth-context";
+import { useRouter } from "next/navigation";
 
 // components/layout/Navbar.tsx
 const Navbar = () => {
+  const { user, logout } = useAuth();
+  const router = useRouter();
   return (
     <div className="w-full flex flex-col items-end border-b">
-      <NavigationMenu className="px-4 py-3">
+      <NavigationMenu className="px-4 py-3 w-full">
         <NavigationMenuList className="max-w-7xl flex justify-between items-center w-full">
           <NavigationMenuItem>
             <Link href="/" className="text-xl font-bold">
@@ -37,6 +43,21 @@ const Navbar = () => {
                 <User className="h-5 w-5" />
               </Link>
             </Button>
+
+            <div>
+              {user ? (
+                <div className="flex items-center gap-4">
+                  <span>Hola, {user.username}</span>
+                  <Button onClick={logout} variant="outline">
+                    Cerrar sesión
+                  </Button>
+                </div>
+              ) : (
+                <Button onClick={() => router.push("/login")}>
+                  Iniciar sesión
+                </Button>
+              )}
+            </div>
           </div>
         </NavigationMenuList>
       </NavigationMenu>
