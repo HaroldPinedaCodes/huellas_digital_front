@@ -37,7 +37,6 @@ export default function RootLayout({
         >
           <main className="relative flex flex-col min-h-screen bg-white">
             <Navbar />
-            {/* <Navbar /> */}
             {children}
           </main>
           <Toaster />

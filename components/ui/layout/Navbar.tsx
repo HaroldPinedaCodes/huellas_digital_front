@@ -17,14 +17,13 @@ const Navbar = () => {
   const { user, logout } = useAuth();
   const router = useRouter();
   return (
-    <div className="w-full flex flex-col items-end border-b">
+    <div className="w-full flex items-center justify-between px-2 border-b">
+      <Link href="/" className="text-xl font-bold">
+        Huellas Digital
+      </Link>
       <NavigationMenu className="px-4 py-3 w-full">
         <NavigationMenuList className="max-w-7xl flex justify-between items-center w-full">
-          <NavigationMenuItem>
-            <Link href="/" className="text-xl font-bold">
-              Huellas Digital
-            </Link>
-          </NavigationMenuItem>
+          <NavigationMenuItem></NavigationMenuItem>
 
           <div className="flex items-center space-x-4">
             <div className="relative">

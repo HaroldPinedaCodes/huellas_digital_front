@@ -16,9 +16,6 @@ const ProductCard = ({
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_UPLOAD_URL || "";
   const imageUrl = image ? `${baseUrl}${image.url}` : "/placeholder.png";
 
-  console.log(imageUrl);
-  console.log(image);
-
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("es-CO", {
       style: "currency",

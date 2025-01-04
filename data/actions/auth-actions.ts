@@ -1,11 +1,12 @@
 "use server";
 import { z } from "zod";
-import {
-  loginUserService,
-  registerUserService,
-} from "@/data/services/auth-service";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
+import {
+  registerUserService,
+  loginUserService,
+} from "@/data/services/auth-service";
 
 const config = {
   maxAge: 60 * 60 * 24 * 7, // 1 week
@@ -29,8 +30,6 @@ const schemaRegister = z.object({
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function registerUserAction(prevState: any, formData: FormData) {
-  console.log("Hello From Register User Action");
-
   const validatedFields = schemaRegister.safeParse({
     username: formData.get("username"),
     password: formData.get("password"),
@@ -70,10 +69,6 @@ export async function registerUserAction(prevState: any, formData: FormData) {
   cookieStore.set("jwt", responseData.jwt, config);
 
   redirect("/dashboard");
-
-  // console.log("#############");
-  // console.log("User Registered Successfully", responseData.jwt);
-  // console.log("#############");
 }
 
 const schemaLogin = z.object({

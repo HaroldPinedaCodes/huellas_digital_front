@@ -1,4 +1,4 @@
-import { getStrapiURL } from "@/lib/api/api";
+import { getStrapiURL } from "@/lib/utils";
 
 interface RegisterUserProps {
   username: string;

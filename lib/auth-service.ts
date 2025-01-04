@@ -1,7 +1,7 @@
 import axios from "axios";
 import { AuthResponse, UserAuthForm } from "@/types/auth";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_STRAPI_UPLOAD_URL;
 
 export const authService = {
   async login(data: UserAuthForm) {
@@ -13,6 +13,7 @@ export const authService = {
           password: data.password,
         }
       );
+      console.log(response);
       return response.data;
     } catch {
       throw new Error("Credenciales inválidas");
