@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import { getGlobalData, getGlobalPageMetadata } from "@/data/loaders";
 import { AuthProvider } from "@/contexts/auth-context";
-import Navbar from "@/components/ui/layout/Navbar";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
+import { Header } from "@/components/custom/header";
+import { Footer } from "@/components/custom/footer";
+// import Navbar from "@/components/ui/layout/Navbar";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,16 +19,30 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Huellas Digital",
-  description: "Tienda de productos para mascotas",
-};
+// export const metadata: Metadata = {
+//   title: "Huellas Digital",
+//   description: "Tienda de productos para mascotas",
+// };
 
-export default function RootLayout({
+export async function generateMetadata(): Promise<Metadata> {
+  const metadata = await getGlobalPageMetadata();
+
+  return {
+    title: metadata?.data?.title ?? "Huellas Digital | Tienda de Mascotas",
+    description:
+      metadata?.data?.description ?? "Tienda de productos para mascotas",
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const globalData = await getGlobalData();
+  console.dir(globalData, { depth: null });
+  console.log("globalData", globalData);
+
   return (
     <html lang="en">
       <AuthProvider>
@@ -36,8 +53,10 @@ export default function RootLayout({
           )}
         >
           <main className="relative flex flex-col min-h-screen bg-white">
-            <Navbar />
+            <Header data={globalData.data.header} />
+            {/* <Navbar /> */}
             {children}
+            <Footer data={globalData.data.footer} />
           </main>
           <Toaster />
         </body>

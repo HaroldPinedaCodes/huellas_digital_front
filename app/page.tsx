@@ -3,9 +3,10 @@ import { ProductGrid } from "@/components/products/ProductGrid";
 import { CategoryList } from "@/components/common/CategoryList";
 import { getAllProducts } from "@/services/api/products";
 import { getCategories } from "@/services/api/categories";
-import { getStrapiData } from "@/services/strapi/dynamic-sections";
+// import { getStrapiData } from "@/services/strapi/dynamic-sections";
 import { HeroSection } from "@/components/custom/hero-section";
 import { FeatureSection } from "@/components/custom/features-section";
+import { getHomePageData } from "@/data/loaders";
 import type { Block } from "@/types/blocks";
 
 function BlockRenderer({ block }: { block: Block }) {
@@ -20,16 +21,20 @@ function BlockRenderer({ block }: { block: Block }) {
 }
 
 async function getDynamicData() {
-  const [products, categories, pageData] = await Promise.all([
+  const [products, categories] = await Promise.all([
     getAllProducts(),
     getCategories(),
-    getStrapiData("/api/home-page"),
+    getHomePageData(),
+    // getStrapiData("/api/home-page"),
   ]);
+
+  const strapiData = await getHomePageData();
+  console.log("strapiData...", strapiData);
 
   return {
     products,
     categories,
-    blocks: pageData?.data?.blocks || [],
+    blocks: strapiData?.data?.blocks || [],
   };
 }
 

@@ -39,7 +39,7 @@ export function FeatureSection({
     <div className="">
       <div className="flex-1">
         <section className="container px-4 py-6 mx-auto md:px-6 lg:py-24">
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-4">
             {feature.map((feature) => (
               <div
                 key={feature.id}

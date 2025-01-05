@@ -24,6 +24,7 @@ export async function fetchData(url: string) {
 }
 
 export async function getHomePageData() {
+  // throw new Error("Test error");
   const url = new URL("/api/home-page", baseUrl);
 
   url.search = qs.stringify({
@@ -40,7 +41,7 @@ export async function getHomePageData() {
               },
             },
           },
-          "layout.features-section": {
+          "layout.feactures-section": {
             populate: {
               feature: {
                 populate: true,
@@ -50,6 +51,31 @@ export async function getHomePageData() {
         },
       },
     },
+  });
+
+  return await fetchData(url.href);
+}
+
+export async function getGlobalData() {
+  const url = new URL("/api/global", baseUrl);
+
+  url.search = qs.stringify({
+    populate: [
+      "header.logoText",
+      "header.ctaButton",
+      "footer.logoText",
+      "footer.socialLink",
+    ],
+  });
+
+  return await fetchData(url.href);
+}
+
+export async function getGlobalPageMetadata() {
+  const url = new URL("/api/global", baseUrl);
+
+  url.search = qs.stringify({
+    fields: ["title", "description"],
   });
 
   return await fetchData(url.href);
