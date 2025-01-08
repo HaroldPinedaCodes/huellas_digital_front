@@ -1,7 +1,7 @@
 // components/custom/hero-section.tsx
 import Link from "next/link";
 import Image from "next/image";
-import { getStrapiURL } from "@/lib/utils";
+// import { getStrapiURL } from "@/lib/utils";
 import type { HeroBlock } from "@/types/blocks";
 
 interface HeroSectionProps {
@@ -15,7 +15,7 @@ export function HeroSection({ data }: HeroSectionProps) {
     return null;
   }
 
-  const imageURL = getStrapiURL(image[0].url);
+  // const imageURL = getStrapiURL(image[0].url);
 
   return (
     <header className="relative h-[600px] overflow-hidden">
@@ -23,7 +23,7 @@ export function HeroSection({ data }: HeroSectionProps) {
         alt={image[0].alternativeText ?? "Hero image"}
         className="absolute inset-0 object-cover w-full h-full"
         height={1080}
-        src={imageURL}
+        src={image[0].url}
         width={1920}
       />
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white bg-black bg-opacity-40">

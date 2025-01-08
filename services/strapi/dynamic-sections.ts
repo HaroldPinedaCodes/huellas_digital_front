@@ -38,7 +38,7 @@ export async function getStrapiData(path: string) {
   try {
     const response = await fetch(url.href);
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
     console.error(error);

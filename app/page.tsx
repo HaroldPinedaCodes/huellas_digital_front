@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { ProductGrid } from "@/components/products/ProductGrid";
+import { ProductGrid } from "@/components/products/product-grid";
 import { CategoryList } from "@/components/common/CategoryList";
 import { getAllProducts } from "@/services/api/products";
 import { getCategories } from "@/services/api/categories";
@@ -29,7 +29,7 @@ async function getDynamicData() {
   ]);
 
   const strapiData = await getHomePageData();
-  console.log("strapiData...", strapiData);
+  // console.log("strapiData...", strapiData);
 
   return {
     products,
@@ -40,6 +40,8 @@ async function getDynamicData() {
 
 export default async function Home() {
   const { products, categories, blocks } = await getDynamicData();
+
+  // console.log("products...", products);
 
   return (
     <main>

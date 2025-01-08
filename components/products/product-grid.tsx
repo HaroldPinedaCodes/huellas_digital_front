@@ -1,26 +1,23 @@
-import ProductCard from "./ProductCard";
+import { ProductCard } from "@/components/products/product-card";
 import { Product } from "../../types/product";
+// import { getStrapiURL } from "@/lib/utils";
 
 interface ProductGridProps {
   products: Product[];
 }
 
 const ProductGrid = ({ products }: ProductGridProps) => {
-  // console.log(products);
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {products.map((product) => (
         <ProductCard
           key={product.id}
-          id={Number(product.id)}
+          id={product.id}
           name={product.name}
-          price={product.priceClient} // o priceVet según necesites
-          image={product.image[0]}
+          price={product.priceClient}
+          images={product.image}
           slug={product.slug}
-          stock={product.stock}
-          rating={product.rating}
-          brand={product.brand}
-          category={product.category}
+          isPriority={false}
         />
       ))}
     </div>
