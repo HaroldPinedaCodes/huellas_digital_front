@@ -1,61 +1,72 @@
-import * as React from "react";
-import { ChevronRight, Home } from "lucide-react";
+// components/common/breadcrumb.tsx
+"use client";
 
 import {
-  Breadcrumb as BreadcrumbContainer,
+  Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { Home } from "lucide-react";
 
-interface BreadcrumbProps {
-  items: {
-    label: string;
-    href?: string;
-  }[];
-  separator?: React.ReactNode;
-}
+// Mapeo de rutas para nombres más amigables
+const routeMap: Record<string, string> = {
+  productos: "Productos",
+  categorias: "Categorías",
+  carrito: "Carrito",
+  cuenta: "Mi Cuenta",
+  // Agrega más mapeos según necesites
+};
 
-export function Breadcrumb({
-  items,
-  separator = <ChevronRight className="h-4 w-4" />,
-}: BreadcrumbProps) {
+export function BreadCrumb() {
+  const pathname = usePathname();
+  const pathSegments = pathname.split("/").filter((path) => path);
+
+  const formatSegmentName = (segment: string) => {
+    // Primero buscar en el mapeo
+    if (routeMap[segment.toLowerCase()]) {
+      return routeMap[segment.toLowerCase()];
+    }
+
+    // Si no está en el mapeo, formatear el string
+    return segment
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  };
+
   return (
-    <BreadcrumbContainer>
+    <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/" className="hover:text-primary">
-            <Home className="h-4 w-4" />
+          <BreadcrumbLink asChild>
+            <Link href="/">
+              <Home className="h-4 w-4" />
+            </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
-        <BreadcrumbSeparator>{separator}</BreadcrumbSeparator>
 
-        {items.map((item, index) => {
-          const isLast = index === items.length - 1;
+        {pathSegments.map((segment, index) => {
+          const href = `/${pathSegments.slice(0, index + 1).join("/")}`;
+          const isLast = index === pathSegments.length - 1;
+          const segmentName = formatSegmentName(segment);
 
           return (
-            <React.Fragment key={item.href || index}>
-              <BreadcrumbItem>
-                {isLast ? (
-                  <BreadcrumbPage>{item.label}</BreadcrumbPage>
-                ) : (
-                  <BreadcrumbLink
-                    href={item.href}
-                    className="hover:text-primary"
-                  >
-                    {item.label}
-                  </BreadcrumbLink>
-                )}
-              </BreadcrumbItem>
-              {!isLast && (
-                <BreadcrumbSeparator>{separator}</BreadcrumbSeparator>
+            <BreadcrumbItem key={href}>
+              {!isLast ? (
+                <BreadcrumbLink asChild>
+                  <Link href={href}>{segmentName}</Link>
+                </BreadcrumbLink>
+              ) : (
+                <BreadcrumbPage>{segmentName}</BreadcrumbPage>
               )}
-            </React.Fragment>
+            </BreadcrumbItem>
           );
         })}
       </BreadcrumbList>
-    </BreadcrumbContainer>
+    </Breadcrumb>
   );
 }

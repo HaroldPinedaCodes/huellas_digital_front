@@ -27,10 +27,13 @@ export async function RelatedProducts({
             key={product.id}
             id={product.id}
             name={product.name}
-            price={product.priceClient}
+            priceClient={product.priceClient}
             slug={product.slug}
-            images={product.image}
+            brand={product.brand}
+            image={product.image}
             isPriority={false}
+            rating={product.rating}
+            stock={product.stock}
           />
         ))}
       </div>

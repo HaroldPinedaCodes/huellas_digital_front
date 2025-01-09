@@ -40,6 +40,8 @@ export function ProductCard({
     brand,
   };
 
+  console.log(image);
+
   return (
     <Card className="group transition-all hover:shadow-lg">
       <CardContent className="p-0">

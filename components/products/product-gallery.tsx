@@ -4,22 +4,27 @@ import { useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-interface ProductImage {
+interface ImageType {
   id: number;
   url: string;
   alternativeText: string | null;
 }
 
-// Cambiamos el nombre de la prop para que coincida con la estructura del producto
-export function ProductGallery({ image }: { image: ProductImage[] }) {
+interface ProductGalleryProps {
+  image: ImageType[];
+}
+
+export function ProductGallery({ image }: ProductGalleryProps) {
+  console.log("Gallery Images:", image); // Debug log
   const [selectedImage, setSelectedImage] = useState(0);
 
-  if (!image || image.length === 0) {
+  // Manejar caso donde no hay imágenes
+  if (!image || !Array.isArray(image) || image.length === 0) {
     return (
-      <div className="relative bg-gray-100">
+      <div className="relative bg-gray-100 rounded-lg">
         <Image
           src="/no-image-placeholder.png"
-          alt="Imagen no disponible"
+          alt="No hay imagen disponible"
           width={500}
           height={500}
           className="object-contain p-4"
@@ -29,40 +34,43 @@ export function ProductGallery({ image }: { image: ProductImage[] }) {
     );
   }
 
+  // Verificar que la imagen seleccionada existe
+  const currentImage = image[selectedImage] || image[0];
+
   return (
-    <div className="space-y-4">
+    <div className="flex space-y-4">
       {/* Imagen principal */}
-      <div className="relative">
+      <div className="flex items-center justify-center relative  bg-white rounded-lg">
         <Image
-          src={image[selectedImage].url}
-          alt={image[selectedImage].alternativeText || "Imagen del producto"}
+          src={currentImage.url}
+          alt={currentImage.alternativeText || "Imagen del producto"}
           width={500}
           height={500}
-          className="object-contain"
+          className="object-contain p-4"
           priority
         />
       </div>
 
       {/* Miniaturas */}
       {image.length > 1 && (
-        <div className="grid grid-cols-4 gap-2 items-center">
+        <div className="grid grid-rows-3 gap-x-8 justify-center items-center">
           {image.map((img, index) => (
             <button
               key={img.id}
               onClick={() => setSelectedImage(index)}
               className={cn(
-                "flex flex-col items-center relative border-2 rounded overflow-hidden",
+                "relative  rounded-md overflow-hidden border-2",
                 selectedImage === index
                   ? "border-primary"
-                  : "border-transparent"
+                  : "border-transparent hover:border-gray-200"
               )}
             >
               <Image
                 src={img.url}
                 alt={img.alternativeText || `Vista ${index + 1}`}
-                width={100}
-                height={100}
-                className="object-cover"
+                width={80}
+                height={80}
+                className="object-contain w-full h-full"
               />
             </button>
           ))}
