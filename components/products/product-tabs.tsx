@@ -1,27 +1,62 @@
+// components/products/product-tabs.tsx
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import type { ProductDetail } from "@/types/product";
 import { Star } from "lucide-react";
 
-export function ProductTabs({ product }: { product: ProductDetail }) {
+interface ProductTabsProps {
+  product: {
+    name: string;
+    brand: {
+      name: string;
+    };
+    category: {
+      name: string;
+    };
+    weight: number;
+    stock: number;
+    description: {
+      type: string;
+      children: {
+        text: string;
+        type: string;
+      }[];
+    }[];
+    rating: number;
+  };
+}
+
+export function ProductTabs({ product }: ProductTabsProps) {
+  // Función para renderizar la descripción
+  const renderDescription = (
+    description: ProductTabsProps["product"]["description"]
+  ) => {
+    return description.map((block, index) => {
+      if (block.children) {
+        return (
+          <p key={index} className="mb-4">
+            {block.children.map((child, childIndex) => (
+              <span key={childIndex}>{child.text}</span>
+            ))}
+          </p>
+        );
+      }
+      return null;
+    });
+  };
+
   return (
-    <Tabs defaultValue="description" className="mt-8">
+    <Tabs defaultValue="description" className="mt-12">
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="description">Descripción</TabsTrigger>
-        <TabsTrigger value="specs">Especificaciones</TabsTrigger>
+        <TabsTrigger value="specifications">Especificaciones</TabsTrigger>
         <TabsTrigger value="reviews">Reseñas</TabsTrigger>
       </TabsList>
+
       <TabsContent value="description" className="mt-6">
         <div className="prose max-w-none">
-          {product.description.map((block, index) => (
-            <p key={index}>
-              {block.children.map((child, childIndex) => (
-                <span key={childIndex}>{child.text}</span>
-              ))}
-            </p>
-          ))}
+          {renderDescription(product.description)}
         </div>
       </TabsContent>
 
@@ -67,7 +102,7 @@ export function ProductTabs({ product }: { product: ProductDetail }) {
                   />
                 ))}
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground mt-1">
                 Basado en reseñas verificadas
               </p>
             </div>
@@ -77,5 +112,3 @@ export function ProductTabs({ product }: { product: ProductDetail }) {
     </Tabs>
   );
 }
-
-export default ProductTabs;

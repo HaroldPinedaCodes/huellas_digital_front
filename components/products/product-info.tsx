@@ -32,20 +32,20 @@ export function ProductInfo({ product }: ProductInfoProps) {
   const [quantity, setQuantity] = useState(1);
 
   // Función para renderizar la descripción
-  const renderDescription = (description: Description[]) => {
-    return description.map((block, index) => {
-      if (block.children) {
-        return (
-          <p key={index} className="text-gray-600">
-            {block.children.map((child, childIndex) => (
-              <span key={childIndex}>{child.text}</span>
-            ))}
-          </p>
-        );
-      }
-      return null;
-    });
-  };
+  // const renderDescription = (description: Description[]) => {
+  //   return description.map((block, index) => {
+  //     if (block.children) {
+  //       return (
+  //         <p key={index} className="text-gray-600">
+  //           {block.children.map((child, childIndex) => (
+  //             <span key={childIndex}>{child.text}</span>
+  //           ))}
+  //         </p>
+  //       );
+  //     }
+  //     return null;
+  //   });
+  // };
 
   return (
     <div className="space-y-6">
@@ -98,9 +98,9 @@ export function ProductInfo({ product }: ProductInfoProps) {
         </Button>
       </div>
 
-      <div className="prose prose-sm">
+      {/* <div className="prose prose-sm">
         {renderDescription(product.description)}
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, ShoppingCart, User } from "lucide-react";
+import { Search, User } from "lucide-react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { useAuth } from "@/contexts/auth-context";
 import { useRouter } from "next/navigation";
+import { CartIcon } from "@/components/cart/cart-icon";
 
 // components/layout/Navbar.tsx
 const Navbar = () => {
@@ -31,11 +32,13 @@ const Navbar = () => {
               <Search className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
             </div>
 
-            <Button variant="ghost" size="icon" asChild>
+            {/* <Button variant="ghost" size="icon" asChild>
               <Link href="/cart">
                 <ShoppingCart className="h-5 w-5" />
               </Link>
-            </Button>
+            </Button> */}
+
+            <CartIcon />
 
             <Button variant="ghost" size="icon" asChild>
               <Link href="/account">

@@ -4,6 +4,7 @@ import { getGlobalData, getGlobalPageMetadata } from "@/data/loaders";
 import { AuthProvider } from "@/contexts/auth-context";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
+import { CartSheet } from "@/components/cart/cart-sheet";
 import { Header } from "@/components/custom/header";
 import { Footer } from "@/components/custom/footer";
 // import Navbar from "@/components/ui/layout/Navbar";
@@ -54,6 +55,7 @@ export default async function RootLayout({
         >
           <main className="relative flex flex-col min-h-screen bg-white">
             <Header data={globalData.data.header} />
+            <CartSheet />
             {/* <Navbar /> */}
             {children}
             <Footer data={globalData.data.footer} />

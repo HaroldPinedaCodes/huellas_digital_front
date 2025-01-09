@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { ProductGrid } from "@/components/products/product-grid";
-import { CategoryList } from "@/components/common/CategoryList";
+import { CategoryList } from "@/components/common/category-list";
 import { getAllProducts } from "@/services/api/products";
 import { getCategories } from "@/services/api/categories";
 // import { getStrapiData } from "@/services/strapi/dynamic-sections";

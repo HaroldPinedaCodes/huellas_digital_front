@@ -14,10 +14,12 @@ const ProductGrid = ({ products }: ProductGridProps) => {
           key={product.id}
           id={product.id}
           name={product.name}
-          price={product.priceClient}
-          images={product.image}
+          priceClient={product.priceClient}
+          image={product.image}
           slug={product.slug}
           isPriority={false}
+          stock={product.stock}
+          brand={product.brand}
         />
       ))}
     </div>
