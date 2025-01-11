@@ -1,7 +1,9 @@
 "use server";
-import { z } from "zod";
+
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { schemaLogin } from "@/schema/login";
+import { schemaRegister } from "@/schema/register";
 
 import {
   registerUserService,
@@ -15,18 +17,6 @@ const config = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
 };
-
-const schemaRegister = z.object({
-  username: z.string().min(3).max(20, {
-    message: "Username must be between 3 and 20 characters",
-  }),
-  password: z.string().min(6).max(100, {
-    message: "Password must be between 6 and 100 characters",
-  }),
-  email: z.string().email({
-    message: "Please enter a valid email address",
-  }),
-});
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function registerUserAction(prevState: any, formData: FormData) {
@@ -70,25 +60,6 @@ export async function registerUserAction(prevState: any, formData: FormData) {
 
   redirect("/dashboard");
 }
-
-const schemaLogin = z.object({
-  identifier: z
-    .string()
-    .min(3, {
-      message: "Identifier must have at least 3 or more characters",
-    })
-    .max(20, {
-      message: "Please enter a valid username or email address",
-    }),
-  password: z
-    .string()
-    .min(6, {
-      message: "Password must have at least 6 or more characters",
-    })
-    .max(100, {
-      message: "Password must be between 6 and 100 characters",
-    }),
-});
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function loginUserAction(prevState: any, formData: FormData) {

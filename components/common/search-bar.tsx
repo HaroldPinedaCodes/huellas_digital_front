@@ -1,30 +1,37 @@
 "use client";
 
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
 
 interface SearchBarProps {
-  onSearch: (query: string) => void;
+  placeholder?: string;
 }
 
-export function SearchBar({ onSearch }: SearchBarProps) {
+export function SearchBar({ placeholder = "Buscar..." }: SearchBarProps) {
   const [query, setQuery] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSearch(query);
+    if (!query.trim()) return;
+
+    const params = new URLSearchParams(searchParams);
+    params.set("q", query.trim());
+    router.push(`/productos?${params.toString()}`);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="relative w-full max-w-lg">
+    <form onSubmit={handleSubmit} className="relative w-full">
       <Input
         type="text"
-        placeholder="Buscar productos..."
+        placeholder={placeholder}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="pr-12"
+        className="pr-10"
       />
       <Button
         type="submit"

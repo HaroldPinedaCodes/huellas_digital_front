@@ -15,6 +15,7 @@ const ProductGrid = ({ products }: ProductGridProps) => {
           id={product.id}
           name={product.name}
           priceClient={product.priceClient}
+          rating={product.rating}
           image={product.image}
           slug={product.slug}
           isPriority={false}

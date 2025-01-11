@@ -50,9 +50,9 @@ export function ProductCard({
             <Image
               src={image[0].url}
               alt={name}
-              width={500}
-              height={500}
-              className="object-contain p-4 transition-transform group-hover:scale-105"
+              width={300}
+              height={300}
+              className="object-contain h-full p-4 transition-transform group-hover:scale-105"
               priority={isPriority}
             />
             {isLowStock && (
