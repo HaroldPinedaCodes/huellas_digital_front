@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/store";
 import type { Product } from "@/types/product";
+import { ProductGuaranteeTag } from "@/components/products/product-guarantee-tag"; // Cambia la importación si no es exportación por defecto
 
 interface ProductCardProps extends Product {
   isPriority?: boolean;
@@ -21,6 +22,7 @@ export function ProductCard({
   rating = 5,
   stock = 10,
   brand,
+  features, // Corregido de feactures a features
   isPriority = true,
 }: ProductCardProps) {
   const { items, addItem } = useCart();
@@ -38,80 +40,97 @@ export function ProductCard({
     slug,
     stock,
     brand,
+    features,
   };
-
-  console.log(image);
+  console.log("Features:", features?.features?.feeding_guide);
 
   return (
-    <Card className="group transition-all hover:shadow-lg">
-      <CardContent className="p-0">
-        <Link href={`/productos/${slug}`}>
-          <div className="relative aspect-square">
-            <Image
-              src={image[0].url}
-              alt={name}
-              width={300}
-              height={300}
-              className="object-contain h-full p-4 transition-transform group-hover:scale-105"
-              priority={isPriority}
-            />
-            {isLowStock && (
-              <span className="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded">
-                ¡Últimas unidades!
-              </span>
-            )}
-            {isOutOfStock && (
-              <span className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
-                Agotado
-              </span>
-            )}
-            {itemInCart && (
-              <span className="absolute top-2 left-2 bg-primary text-white text-xs px-2 py-1 rounded">
-                En carrito: {itemInCart.quantity}
-              </span>
-            )}
-          </div>
-        </Link>
+    <div className="relative">
+      {features?.features?.feeding_guide && (
+        <div className="absolute top-2 right-2 z-10">
+          <ProductGuaranteeTag guarantee={features.features.guarantee} />
+        </div>
+      )}
+      {/* Resto del componente... */}
 
-        <div className="p-4">
-          {brand && (
-            <span className="text-xs text-muted-foreground">{brand.name}</span>
-          )}
-
+      <Card className="group transition-all hover:shadow-lg">
+        <CardContent className="p-0">
           <Link href={`/productos/${slug}`}>
-            <h3 className="font-medium line-clamp-2 hover:text-primary transition-colors">
-              {name}
-            </h3>
+            <div className="relative aspect-square">
+              <Image
+                src={image[0].url}
+                alt={name}
+                width={300}
+                height={300}
+                className="object-contain h-full p-4 transition-transform group-hover:scale-105"
+                priority={isPriority}
+              />
+              {isLowStock && (
+                <span className="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded">
+                  ¡Últimas unidades!
+                </span>
+              )}
+              {isOutOfStock && (
+                <span className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+                  Agotado
+                </span>
+              )}
+              {itemInCart && (
+                <span className="absolute top-2 left-2 bg-primary text-white text-xs px-2 py-1 rounded">
+                  En carrito: {itemInCart.quantity}
+                </span>
+              )}
+            </div>
           </Link>
 
-          <div className="mt-2 flex items-center gap-2">
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-4 h-4 ${
-                    i < rating
-                      ? "fill-yellow-400 text-yellow-400"
-                      : "text-gray-300"
-                  }`}
-                />
-              ))}
+          <div className="p-4">
+            {brand && (
+              <span className="text-xs text-muted-foreground">
+                {brand.name}
+              </span>
+            )}
+
+            <Link href={`/productos/${slug}`}>
+              <h3 className="font-medium line-clamp-2 hover:text-primary transition-colors">
+                {name}
+              </h3>
+            </Link>
+
+            <div className="mt-2 flex items-center gap-2">
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`w-4 h-4 ${
+                      i < rating
+                        ? "fill-yellow-400 text-yellow-400"
+                        : "text-gray-300"
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-4 flex items-center justify-between">
+              <p className="text-lg font-bold">
+                ${priceClient.toLocaleString()}
+              </p>
+              <Button
+                onClick={() => addItem(productData)}
+                disabled={isOutOfStock || !!itemInCart}
+                variant="outline"
+                size="sm"
+              >
+                {isOutOfStock
+                  ? "Agotado"
+                  : itemInCart
+                  ? "En carrito"
+                  : "Agregar"}
+              </Button>
             </div>
           </div>
-
-          <div className="mt-4 flex items-center justify-between">
-            <p className="text-lg font-bold">${priceClient.toLocaleString()}</p>
-            <Button
-              onClick={() => addItem(productData)}
-              disabled={isOutOfStock || !!itemInCart}
-              variant="outline"
-              size="sm"
-            >
-              {isOutOfStock ? "Agotado" : itemInCart ? "En carrito" : "Agregar"}
-            </Button>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

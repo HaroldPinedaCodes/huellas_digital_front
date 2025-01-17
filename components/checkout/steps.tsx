@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "@/store/index";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DeliveryForm } from "@/components/forms/delivery-form";
@@ -17,6 +17,21 @@ export function Steps() {
   const hasDeliveryInfo = deliveryInfo !== null;
   // Verificar si hay información de pago
   const hasPaymentInfo = hasDeliveryInfo && paymentInfo !== null;
+
+  const handleStepComplete = (nextStep: string) => {
+    setTimeout(() => {
+      setActiveStep(nextStep);
+    }, 100);
+  };
+
+  useEffect(() => {
+    console.log("Estado actual:", {
+      activeStep,
+      deliveryInfo,
+      paymentInfo,
+      items,
+    });
+  }, [activeStep, deliveryInfo, paymentInfo, items]);
 
   if (items.length === 0) {
     return (
@@ -42,11 +57,11 @@ export function Steps() {
       </TabsList>
 
       <TabsContent value="delivery">
-        <DeliveryForm onComplete={() => setActiveStep("payment")} />
+        <DeliveryForm onComplete={() => handleStepComplete("payment")} />
       </TabsContent>
 
       <TabsContent value="payment">
-        <PaymentForm onComplete={() => setActiveStep("confirmation")} />
+        <PaymentForm onComplete={() => handleStepComplete("confirmation")} />
       </TabsContent>
 
       <TabsContent value="confirmation">

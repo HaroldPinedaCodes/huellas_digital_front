@@ -4,8 +4,10 @@ import { ProductInfo } from "@/components/products/product-info";
 import { ProductTabs } from "@/components/products/product-tabs";
 import { RelatedProducts } from "@/components/products/related-products";
 import { getProductBySlug } from "@/services/api/products";
+import { ProductFeatures } from "@/components/products/product-features";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+// import { ProductGuarantee } from "@/components/products/product-guarantee";
 
 interface PageProps {
   params: {
@@ -33,7 +35,7 @@ export default async function ProductPage({ params }: PageProps) {
       <div className="container mx-auto px-4 pb-16">
         <BreadCrumb />
         <div className="mt-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-fit">
             <Suspense
               fallback={
                 <div className="aspect-square bg-gray-100 animate-pulse rounded-lg" />
@@ -50,6 +52,14 @@ export default async function ProductPage({ params }: PageProps) {
               <ProductTabs product={product} />
             </div>
           </div>
+          {
+            // Mostrar características del producto
+            product.features && (
+              <ProductFeatures features={product.features.features} />
+            )
+          }
+          {/* <ProductFeatures features={product.features.features} /> */}
+          {/* <ProductGuarantee /> */}
 
           <div className="mt-16">
             <RelatedProducts

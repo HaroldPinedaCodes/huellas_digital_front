@@ -38,6 +38,38 @@ export interface Product {
   priceClient: number;
   priceVet?: number;
   rating: number;
+  features?: {
+    features?: {
+      analysis: {
+        fat: string;
+        fiber: string;
+        omega_3: string;
+        omega_6: string;
+        protein: string;
+        taurine?: string;
+        vitamin_A?: string;
+        vitamin_E?: string;
+        probiotics?: string;
+        vitamin_D3?: string;
+      };
+      feeding_guide: {
+        puppy_small_breeds: {
+          [key: string]: {
+            "2_months": string;
+            "9_months": string;
+            "3_to_5_months": string;
+            "6_to_8_months": string;
+          };
+        };
+      };
+      guarantee?: {
+        type: string;
+        terms: string;
+        hasGarantee: boolean;
+        duration_days: string;
+      };
+    };
+  };
   image: {
     id: number;
     url: string;

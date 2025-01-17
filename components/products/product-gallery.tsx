@@ -21,7 +21,7 @@ export function ProductGallery({ image }: ProductGalleryProps) {
   // Manejar caso donde no hay imágenes
   if (!image || !Array.isArray(image) || image.length === 0) {
     return (
-      <div className="relative bg-gray-100 rounded-lg">
+      <div className="relative bg-gray-100 rounded-lg h-fit">
         <Image
           src="/no-image-placeholder.png"
           alt="No hay imagen disponible"
@@ -38,9 +38,9 @@ export function ProductGallery({ image }: ProductGalleryProps) {
   const currentImage = image[selectedImage] || image[0];
 
   return (
-    <div className="flex space-y-4">
+    <div className="flex items-center space-y-4">
       {/* Imagen principal */}
-      <div className="flex items-center justify-center relative  bg-white rounded-lg">
+      <div className="flex items-center justify-center relative  bg-white rounded-lg h-fit">
         <Image
           src={currentImage.url}
           alt={currentImage.alternativeText || "Imagen del producto"}
@@ -53,7 +53,7 @@ export function ProductGallery({ image }: ProductGalleryProps) {
 
       {/* Miniaturas */}
       {image.length > 1 && (
-        <div className="grid grid-rows-3 gap-x-8 justify-center items-center">
+        <div className="grid grid-rows-3 gap-y-8 mt-8 justify-center items-end h-fit ">
           {image.map((img, index) => (
             <button
               key={img.id}
