@@ -1,8 +1,10 @@
+// components/forms/delivery-form.tsx
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { DeliveryFormValues, deliverySchema } from "@/schema/checkout";
+import { useCart } from "@/store";
 import {
   Form,
   FormControl,
@@ -13,40 +15,30 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { DeliveryFormValues, deliverySchema } from "@/schema/checkout";
-import { useCart } from "@/store";
 
 interface DeliveryFormProps {
   onComplete: () => void;
 }
 
 export function DeliveryForm({ onComplete }: DeliveryFormProps) {
-  const { setDeliveryInfo } = useCart();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { setDeliveryInfo, deliveryInfo } = useCart();
 
   const form = useForm<DeliveryFormValues>({
     resolver: zodResolver(deliverySchema),
     defaultValues: {
-      fullName: "",
-      email: "",
-      address: "",
-      city: "",
-      state: "",
-      zipCode: "",
-      phone: "",
+      fullName: deliveryInfo?.fullName || "",
+      email: deliveryInfo?.email || "",
+      phone: deliveryInfo?.phone || "",
+      address: deliveryInfo?.address || "",
+      city: deliveryInfo?.city || "",
+      state: deliveryInfo?.state || "",
+      zipCode: deliveryInfo?.zipCode || "",
     },
   });
 
-  const onSubmit = async (values: DeliveryFormValues) => {
-    try {
-      setIsSubmitting(true);
-      setDeliveryInfo(values);
-      onComplete();
-    } catch (error) {
-      console.error("Error al guardar la información:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
+  const onSubmit = (values: DeliveryFormValues) => {
+    setDeliveryInfo(values);
+    onComplete();
   };
 
   return (
@@ -59,7 +51,7 @@ export function DeliveryForm({ onComplete }: DeliveryFormProps) {
             <FormItem>
               <FormLabel>Nombre completo</FormLabel>
               <FormControl>
-                <Input placeholder="Nombre completo" {...field} />
+                <Input {...field} placeholder="Nombre completo" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -74,9 +66,9 @@ export function DeliveryForm({ onComplete }: DeliveryFormProps) {
               <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input
+                  {...field}
                   type="email"
                   placeholder="correo@ejemplo.com"
-                  {...field}
                 />
               </FormControl>
               <FormMessage />
@@ -91,7 +83,7 @@ export function DeliveryForm({ onComplete }: DeliveryFormProps) {
             <FormItem>
               <FormLabel>Teléfono</FormLabel>
               <FormControl>
-                <Input placeholder="Teléfono" {...field} />
+                <Input {...field} placeholder="Teléfono" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -105,7 +97,7 @@ export function DeliveryForm({ onComplete }: DeliveryFormProps) {
             <FormItem>
               <FormLabel>Dirección</FormLabel>
               <FormControl>
-                <Input placeholder="Dirección completa" {...field} />
+                <Input {...field} placeholder="Dirección completa" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -119,7 +111,7 @@ export function DeliveryForm({ onComplete }: DeliveryFormProps) {
             <FormItem>
               <FormLabel>Ciudad</FormLabel>
               <FormControl>
-                <Input placeholder="Ciudad" {...field} />
+                <Input {...field} placeholder="Ciudad" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -131,9 +123,9 @@ export function DeliveryForm({ onComplete }: DeliveryFormProps) {
           name="state"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Estado</FormLabel>
+              <FormLabel>Estado/Departamento</FormLabel>
               <FormControl>
-                <Input placeholder="Estado" {...field} />
+                <Input {...field} placeholder="Estado o Departamento" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -147,15 +139,15 @@ export function DeliveryForm({ onComplete }: DeliveryFormProps) {
             <FormItem>
               <FormLabel>Código Postal</FormLabel>
               <FormControl>
-                <Input placeholder="Código Postal" {...field} />
+                <Input {...field} placeholder="Código Postal" />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? "Guardando..." : "Continuar al pago"}
+        <Button type="submit" className="w-full">
+          Continuar al pago
         </Button>
       </form>
     </Form>

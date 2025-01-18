@@ -1,8 +1,10 @@
+// components/forms/payment-form.tsx
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { PaymentFormValues, paymentSchema } from "@/schema/checkout";
+import { useCart } from "@/store";
 import {
   Form,
   FormControl,
@@ -13,68 +15,67 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Card } from "@/components/ui/card";
-import { paymentSchema } from "@/schema/checkout";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface PaymentFormProps {
   onComplete: () => void;
 }
 
 export function PaymentForm({ onComplete }: PaymentFormProps) {
-  const form = useForm<z.infer<typeof paymentSchema>>({
+  const { setPaymentInfo, paymentInfo } = useCart();
+
+  const form = useForm<PaymentFormValues>({
     resolver: zodResolver(paymentSchema),
     defaultValues: {
-      paymentMethod: "card",
+      paymentMethod: paymentInfo?.paymentMethod || "card",
+      cardNumber: paymentInfo?.cardNumber || "",
+      cardExpiry: paymentInfo?.cardExpiry || "",
+      cardCvc: paymentInfo?.cardCvc || "",
     },
   });
 
   const paymentMethod = form.watch("paymentMethod");
 
+  const onSubmit = (values: PaymentFormValues) => {
+    console.log("Submitting payment info:", values); // Debug
+    setPaymentInfo(values);
+    onComplete();
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onComplete)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
           name="paymentMethod"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Método de pago</FormLabel>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  className="grid grid-cols-2 gap-4"
-                >
-                  <Card className="p-4 cursor-pointer">
-                    <RadioGroupItem
-                      value="card"
-                      id="card"
-                      className="sr-only"
-                    />
-                    <label htmlFor="card" className="cursor-pointer">
-                      <div className="flex items-center gap-2">
-                        <span>Tarjeta de crédito</span>
-                      </div>
-                    </label>
-                  </Card>
-
-                  <Card className="p-4 cursor-pointer">
-                    <RadioGroupItem value="pse" id="pse" className="sr-only" />
-                    <label htmlFor="pse" className="cursor-pointer">
-                      <div className="flex items-center gap-2">
-                        <span>PSE</span>
-                      </div>
-                    </label>
-                  </Card>
-                </RadioGroup>
-              </FormControl>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccionar método de pago" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="card">Tarjeta de crédito</SelectItem>
+                  <SelectItem value="pse">PSE</SelectItem>
+                  <SelectItem value="cash">Efectivo</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
             </FormItem>
           )}
         />
 
         {paymentMethod === "card" && (
-          <div className="space-y-4">
+          <>
             <FormField
               control={form.control}
               name="cardNumber"
@@ -82,7 +83,11 @@ export function PaymentForm({ onComplete }: PaymentFormProps) {
                 <FormItem>
                   <FormLabel>Número de tarjeta</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="4242 4242 4242 4242" />
+                    <Input
+                      {...field}
+                      value={field.value || ""}
+                      placeholder="**** **** **** ****"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -95,9 +100,13 @@ export function PaymentForm({ onComplete }: PaymentFormProps) {
                 name="cardExpiry"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Fecha de expiración</FormLabel>
+                    <FormLabel>Fecha de vencimiento</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="MM/YY" />
+                      <Input
+                        {...field}
+                        value={field.value || ""}
+                        placeholder="MM/YY"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -111,18 +120,22 @@ export function PaymentForm({ onComplete }: PaymentFormProps) {
                   <FormItem>
                     <FormLabel>CVC</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="123" />
+                      <Input
+                        {...field}
+                        value={field.value || ""}
+                        placeholder="123"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-          </div>
+          </>
         )}
 
         <Button type="submit" className="w-full">
-          Continuar
+          Continuar a confirmación
         </Button>
       </form>
     </Form>

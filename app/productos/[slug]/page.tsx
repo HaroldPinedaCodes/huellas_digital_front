@@ -26,7 +26,6 @@ export default async function ProductPage({ params }: PageProps) {
       notFound();
     }
 
-    // Verificar que el producto tiene imágenes
     if (!product.image || !Array.isArray(product.image)) {
       console.warn("Product has no valid images array");
     }
@@ -42,7 +41,6 @@ export default async function ProductPage({ params }: PageProps) {
               }
             >
               <ProductGallery
-                // Asegurar que siempre pasamos un array
                 image={Array.isArray(product.image) ? product.image : []}
               />
             </Suspense>
@@ -52,14 +50,9 @@ export default async function ProductPage({ params }: PageProps) {
               <ProductTabs product={product} />
             </div>
           </div>
-          {
-            // Mostrar características del producto
-            product.features && (
-              <ProductFeatures features={product.features.features} />
-            )
-          }
-          {/* <ProductFeatures features={product.features.features} /> */}
-          {/* <ProductGuarantee /> */}
+          {product.features && (
+            <ProductFeatures features={product.features.features} />
+          )}
 
           <div className="mt-16">
             <RelatedProducts

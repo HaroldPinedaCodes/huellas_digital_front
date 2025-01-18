@@ -11,10 +11,10 @@ export const deliverySchema = z.object({
 });
 
 export const paymentSchema = z.object({
-  paymentMethod: z.enum(["card", "pse"]),
-  cardNumber: z.string().optional(),
-  cardExpiry: z.string().optional(),
-  cardCvc: z.string().optional(),
+  paymentMethod: z.enum(["card", "pse", "cash"]),
+  cardNumber: z.string().optional().nullable(),
+  cardExpiry: z.string().optional().nullable(),
+  cardCvc: z.string().optional().nullable(),
 });
 
 export type DeliveryFormValues = z.infer<typeof deliverySchema>;
