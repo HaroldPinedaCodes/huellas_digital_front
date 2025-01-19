@@ -3,58 +3,71 @@ import { CreateOrderData, OrderItem } from "@/types/orders";
 import { getStrapiURL } from "@/lib/utils";
 // import { User } from "lucide-react";
 
+// const STRAPI_URL =
+//   process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337/api";
+
+// Función auxiliar para generar número de orden
+// function generateOrderNumber(): string {
+//   const prefix = "ORD";
+//   const timestamp = Date.now();
+//   const random = Math.floor(Math.random() * 1000)
+//     .toString()
+//     .padStart(3, "0");
+//   return `${prefix}-${timestamp}-${random}`;
+// }
+
 export async function createOrder(
   orderData: CreateOrderData
 ): Promise<OrderItem> {
   try {
-    // Adaptamos los datos para que coincidan exactamente con los campos de Strapi
-    const strapiOrderData = {
-      orderNumber: generateOrderNumber(),
-      items: orderData.items,
-      shippingAddress: orderData.shippingAddress,
-      totalAmount: orderData.totalAmount,
-      statusPayment: orderData.condition, // Cambio a statusPayment
-      paymentMethod: orderData.paymentMethod,
-      statusDelivery: orderData.statusDelivery, // Cambio a statusDelivery
-      // Si el usuario está autenticado, incluimos la relación
-      ...(orderData.user && { user: orderData.user }),
+    // Generar documentId único
+    // const documentId = generateDocumentId();
+
+    const strapiData = {
+      data: {
+        // documentId,
+        orderNumber: orderData.orderNumber,
+        items: orderData.items,
+        condition: "pending",
+        shippingAddress: orderData.shippingAddress,
+        totalAmount: orderData.totalAmount,
+        paymentMethod: orderData.paymentMethod,
+        statusDelivery: "pending",
+        // El resto de campos (createdAt, updatedAt, publishedAt) los maneja Strapi
+      },
     };
 
-    console.log("Sending to Strapi:", strapiOrderData); // Para debugging
+    console.log("Sending to Strapi:", strapiData); // Debug
 
-    const response = await fetch(`${getStrapiURL("/api/orders")}`, {
+    const response = await fetch(getStrapiURL("/api/orders"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        data: strapiOrderData,
-      }),
+      body: JSON.stringify(strapiData),
     });
 
     if (!response.ok) {
       const error = await response.json();
-      console.error("Strapi error details:", error);
+      console.error("Strapi error:", error);
       throw new Error(error.error?.message || "Error creating order");
     }
 
-    const data = await response.json();
-    return data.data;
+    const responseData = await response.json();
+    return responseData.data;
   } catch (error) {
     console.error("Error in createOrder:", error);
     throw error;
   }
 }
 
-// Función auxiliar para generar número de orden
-function generateOrderNumber(): string {
-  const prefix = "ORD";
-  const timestamp = Date.now();
-  const random = Math.floor(Math.random() * 1000)
-    .toString()
-    .padStart(3, "0");
-  return `${prefix}-${timestamp}-${random}`;
-}
+// Función auxiliar para generar documentId
+// function generateDocumentId(): string {
+//   return Array(25)
+//     .fill(0)
+//     .map(() => Math.random().toString(36).charAt(2))
+//     .join("");
+// }
 
 // Función para obtener órdenes de un usuario
 export async function getUserOrders(userId: number): Promise<OrderItem[]> {

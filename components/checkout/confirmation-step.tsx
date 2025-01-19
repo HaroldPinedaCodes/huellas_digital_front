@@ -5,10 +5,10 @@ import { useCart } from "@/store";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { createOrder } from "@/services/api/orders";
-import { CreateOrderData } from "@/types/orders"; // Cambiar a /order
+import { CreateOrderData, PaymentMethod } from "@/types/orders";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation"; // Cambiar a navigation
+import { useRouter } from "next/navigation";
 
 interface ConfirmationStepProps {
   onComplete: () => void;
@@ -19,7 +19,6 @@ export function ConfirmationStep({ onComplete }: ConfirmationStepProps) {
     items,
     deliveryInfo,
     paymentInfo,
-    user,
     getTotalPrice,
     clearCart,
     clearCheckout,
@@ -28,18 +27,21 @@ export function ConfirmationStep({ onComplete }: ConfirmationStepProps) {
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const getPaymentMethodText = (method: string) => {
-    switch (method) {
-      case "card":
-        return "Tarjeta de Crédito";
-      case "pse":
-        return "PSE";
-      case "cash":
-        return "Efectivo";
-      default:
-        return method;
-    }
+  const getPaymentMethodText = (method: PaymentMethod): string => {
+    const paymentMethods: Record<PaymentMethod, string> = {
+      card: "Tarjeta de Crédito",
+      pse: "PSE",
+      cash: "Efectivo",
+    };
+    return paymentMethods[method] || method;
   };
+
+  // const generateDocumentId = (): string => {
+  //   return Array(25)
+  //     .fill(0)
+  //     .map(() => Math.random().toString(36).charAt(2))
+  //     .join("");
+  // };
 
   const generateOrderNumber = (): string => {
     const prefix = "ORD";
@@ -50,7 +52,7 @@ export function ConfirmationStep({ onComplete }: ConfirmationStepProps) {
     return `${prefix}-${timestamp}-${random}`;
   };
 
-  const handleCreateOrder = async () => {
+  const handleCreateOrder = async (): Promise<void> => {
     if (!deliveryInfo || !paymentInfo) {
       toast.error("Información incompleta");
       return;
@@ -60,8 +62,10 @@ export function ConfirmationStep({ onComplete }: ConfirmationStepProps) {
 
     try {
       const orderData: CreateOrderData = {
+        // documentId: generateDocumentId(),
         orderNumber: generateOrderNumber(),
         items: items.map((item) => ({
+          id: item.product.id,
           productId: item.product.id,
           name: item.product.name,
           quantity: item.quantity,
@@ -75,9 +79,8 @@ export function ConfirmationStep({ onComplete }: ConfirmationStepProps) {
         },
         totalAmount: getTotalPrice(),
         condition: "pending",
-        paymentMethod: paymentInfo.paymentMethod as "card" | "pse" | "cash",
+        paymentMethod: paymentInfo.paymentMethod,
         statusDelivery: "pending",
-        ...(user && { user: user.id }),
       };
 
       const order = await createOrder(orderData);
@@ -128,19 +131,15 @@ export function ConfirmationStep({ onComplete }: ConfirmationStepProps) {
           <div className="space-y-2 text-sm">
             <p className="text-muted-foreground">Método de pago:</p>
             <p>{getPaymentMethodText(paymentInfo.paymentMethod)}</p>
-
             {paymentInfo.paymentMethod === "card" && paymentInfo.cardNumber && (
               <>
                 <p className="text-muted-foreground mt-2">
                   Detalles de la tarjeta:
                 </p>
-                <p>
-                  Número: **** **** ****{" "}
-                  {paymentInfo.cardNumber
-                    ? paymentInfo.cardNumber.slice(-4)
-                    : ""}
-                </p>
-                <p>Fecha de vencimiento: {paymentInfo.cardExpiry}</p>
+                <p>Número: **** **** **** {paymentInfo.cardNumber.slice(-4)}</p>
+                {paymentInfo.cardExpiry && (
+                  <p>Fecha de vencimiento: {paymentInfo.cardExpiry}</p>
+                )}
               </>
             )}
           </div>
