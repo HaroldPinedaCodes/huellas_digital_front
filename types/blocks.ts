@@ -24,16 +24,22 @@ export interface HeroBlock {
   __component: "layout.hero-section";
   heading: string;
   subHeading: string;
-  image: {
-    id: number;
-    url: string;
-    alternativeText: string | null;
-  }[];
+  image: MediaItem[];
+
+  mobileImage: MediaItem[]; // Add mobile image array
   link: {
     id: number;
     url: string;
     text: string;
   };
+  textAlignment: "left" | "center" | "right";
+  verticalAlignment: "top" | "center" | "bottom";
+}
+
+interface MediaItem {
+  id: number;
+  url: string;
+  alternativeText: string | null;
 }
 
 export interface FeatureBlock extends BaseBlock {

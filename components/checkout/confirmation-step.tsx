@@ -8,7 +8,7 @@ import { createOrder } from "@/services/api/orders";
 import { CreateOrderData, PaymentMethod } from "@/types/orders";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 interface ConfirmationStepProps {
   onComplete: () => void;
@@ -24,7 +24,7 @@ export function ConfirmationStep({ onComplete }: ConfirmationStepProps) {
     clearCheckout,
   } = useCart();
 
-  const router = useRouter();
+  // const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const getPaymentMethodText = (method: PaymentMethod): string => {
@@ -35,13 +35,6 @@ export function ConfirmationStep({ onComplete }: ConfirmationStepProps) {
     };
     return paymentMethods[method] || method;
   };
-
-  // const generateDocumentId = (): string => {
-  //   return Array(25)
-  //     .fill(0)
-  //     .map(() => Math.random().toString(36).charAt(2))
-  //     .join("");
-  // };
 
   const generateOrderNumber = (): string => {
     const prefix = "ORD";
@@ -62,12 +55,18 @@ export function ConfirmationStep({ onComplete }: ConfirmationStepProps) {
 
     try {
       const orderData: CreateOrderData = {
-        // documentId: generateDocumentId(),
         orderNumber: generateOrderNumber(),
+        // Guardamos la información completa del producto en el campo items (JSON)
         items: items.map((item) => ({
-          id: item.product.id,
           productId: item.product.id,
           name: item.product.name,
+          quantity: item.quantity,
+
+          price: item.product.priceClient,
+        })),
+        // En orderItems solo enviamos la relación con el ID del producto
+        orderItems: items.map((item) => ({
+          product: item.product.id, // Solo el ID
           quantity: item.quantity,
           price: item.product.priceClient,
         })),
@@ -84,12 +83,11 @@ export function ConfirmationStep({ onComplete }: ConfirmationStepProps) {
       };
 
       const order = await createOrder(orderData);
+      console.log("Orden creada:", order); // Para verificar la respuesta
 
       toast.success("Orden creada exitosamente");
       clearCart();
       clearCheckout();
-
-      router.push(`/orders/${order.id}`);
       onComplete();
     } catch (error) {
       console.error("Error creating order:", error);

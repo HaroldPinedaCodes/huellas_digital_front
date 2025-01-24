@@ -81,6 +81,7 @@ export interface Product {
     id: number;
     name: string;
   };
+  weight?: number;
 }
 
 export interface Description {

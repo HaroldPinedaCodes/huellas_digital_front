@@ -1,42 +1,80 @@
-// components/custom/hero-section.tsx
+"use client";
+
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-// import { getStrapiURL } from "@/lib/utils";
+import clsx from "clsx";
 import type { HeroBlock } from "@/types/blocks";
 
-interface HeroSectionProps {
-  data: HeroBlock; // Ahora espera el tipo HeroBlock
-}
+export function HeroSection({ data }: { data: HeroBlock }) {
+  const {
+    heading,
+    subHeading,
+    image,
+    mobileImage,
+    link,
+    textAlignment = "left", // Default values
+    verticalAlignment = "center",
+  } = data;
 
-export function HeroSection({ data }: HeroSectionProps) {
-  const { heading, subHeading, image, link } = data;
+  console.log("data...", data);
 
-  if (!image || image.length === 0) {
-    return null;
-  }
+  if (!image?.length) return null;
 
-  // const imageURL = getStrapiURL(image[0].url);
+  const alignmentClasses = {
+    left: "md:ml-24",
+    right: "md:ml-auto md:mr-24",
+    center: "mx-auto text-center",
+  };
+
+  const verticalClasses = {
+    top: "justify-start items-start pt-40",
+    center: "justify-center items-center",
+    bottom: "justify-end items-end pb-40",
+  };
 
   return (
-    <header className="relative h-[600px] overflow-hidden">
+    <header className="relative h-[812px] md:h-[600px] overflow-hidden">
       <Image
-        alt={image[0].alternativeText ?? "Hero image"}
-        className="absolute inset-0 object-cover w-full h-full"
+        alt={image[0].alternativeText ?? "Hero desktop"}
+        className="absolute inset-0 hidden md:block object-cover w-full h-full mt-24"
         height={1080}
         src={image[0].url}
         width={1920}
+        priority
       />
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white bg-black bg-opacity-40">
-        <h1 className="text-4xl font-bold md:text-5xl lg:text-6xl">
-          {heading}
-        </h1>
-        <p className="mt-4 text-lg md:text-xl lg:text-2xl">{subHeading}</p>
-        <Link
-          className="mt-8 inline-flex items-center justify-center px-6 py-3 text-base font-medium text-black bg-white rounded-md shadow hover:bg-gray-100"
-          href={link.url}
-        >
-          {link.text}
-        </Link>
+      {mobileImage?.[0] && (
+        <Image
+          alt={mobileImage[0].alternativeText ?? "Hero mobile"}
+          className="absolute inset-0 md:hidden object-cover w-full h-full mt-16"
+          height={812}
+          src={mobileImage[0].url}
+          width={375}
+          priority
+        />
+      )}
+      <div
+        className={clsx(
+          "relative z-10 flex flex-col h-full p-6 md:p-12",
+          alignmentClasses[textAlignment],
+          verticalClasses[verticalAlignment],
+          "w-full md:w-1/2"
+        )}
+      >
+        <div className="bg-white/80 backdrop-blur-sm p-8 rounded-lg">
+          <h1 className="text-2xl md:text-5xl font-bold leading-tight">
+            {heading}
+          </h1>
+          <p className="mt-4 md:mt-6 text-lg md:text-xl text-gray-700">
+            {subHeading}
+          </p>
+          <Link
+            className="mt-8 inline-block px-8 py-4 text-base font-medium text-black bg-[#FBBC05] rounded-md hover:bg-[#fac533] transition-colors"
+            href={link.url}
+          >
+            {link.text}
+          </Link>
+        </div>
       </div>
     </header>
   );

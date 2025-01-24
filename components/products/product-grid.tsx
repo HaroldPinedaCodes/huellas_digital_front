@@ -21,6 +21,7 @@ const ProductGrid = ({ products }: ProductGridProps) => {
           isPriority={false}
           stock={product.stock}
           brand={product.brand}
+          weight={product.weight}
           features={product.features}
         />
       ))}

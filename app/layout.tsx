@@ -6,6 +6,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import { CartSheet } from "@/components/cart/cart-sheet";
 import { Header } from "@/components/custom/header";
+import { ThemeProvider } from "next-themes";
+
 import { Footer } from "@/components/custom/footer";
 // import Navbar from "@/components/ui/layout/Navbar";
 import "./globals.css";
@@ -45,7 +47,11 @@ export default async function RootLayout({
   // console.log("globalData", globalData);
 
   return (
-    <html lang="en">
+    <html
+      className="dark:bg-gray-950 antialiased"
+      lang="es"
+      suppressHydrationWarning
+    >
       <AuthProvider>
         <body
           className={cn(
@@ -53,13 +59,19 @@ export default async function RootLayout({
             `${geistSans.variable} ${geistMono.variable}`
           )}
         >
-          <main className="relative flex flex-col min-h-screen bg-white">
-            <Header data={globalData.data.header} />
-            <CartSheet />
-            {/* <Navbar /> */}
-            {children}
-            <Footer data={globalData.data.footer} />
-          </main>
+          <ThemeProvider
+            defaultTheme="system"
+            disableTransitionOnChange
+            attribute="class"
+          >
+            <main className="relative flex flex-col min-h-screen bg-white">
+              <Header data={globalData.data.header} />
+              <CartSheet />
+              {/* <Navbar /> */}
+              {children}
+              <Footer data={globalData.data.footer} />
+            </main>
+          </ThemeProvider>
           <Toaster />
         </body>
       </AuthProvider>

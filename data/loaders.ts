@@ -36,6 +36,9 @@ export async function getHomePageData() {
               image: {
                 fields: ["url", "alternativeText"],
               },
+              mobileImage: {
+                fields: ["url", "alternativeText"],
+              },
               link: {
                 populate: true,
               },

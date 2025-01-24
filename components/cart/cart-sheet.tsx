@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { ShoppingBag } from "lucide-react";
 import { useCart } from "@/store";
 import { CartItem } from "./cart-item";
+import Link from "next/link";
 
 export function CartSheet() {
   const { items, isOpen, setIsOpen } = useCart();
@@ -49,7 +50,9 @@ export function CartSheet() {
                 <span>Total</span>
                 <span>${totalAmount.toLocaleString()}</span>
               </div>
-              <Button className="w-full">Proceder al pago</Button>
+              <Link href="/checkout">
+                <Button className="w-full">Proceder al pago</Button>
+              </Link>
             </div>
           </Fragment>
         )}

@@ -27,7 +27,7 @@ const Navbar = () => {
           <NavigationMenuItem></NavigationMenuItem>
 
           <div className="flex items-center space-x-4">
-            <div className="relative">
+            <div className="relative border border-input rounded-lg flex items-center">
               <Input placeholder="Buscar productos..." className="w-64 pl-10" />
               <Search className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
             </div>

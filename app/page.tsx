@@ -29,7 +29,7 @@ async function getDynamicData() {
   ]);
 
   const strapiData = await getHomePageData();
-  // console.log("strapiData...", strapiData);
+  console.log("strapiData...", strapiData);
 
   return {
     products,

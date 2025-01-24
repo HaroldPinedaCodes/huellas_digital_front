@@ -1,16 +1,23 @@
 import Image from "next/image";
 import Link from "next/link";
 
+interface ImageData {
+  url: string;
+  id: number;
+  name: string;
+  // ... otros campos opcionales
+}
+
 interface CategoryItemProps {
   name: string;
   slug: string;
-  image?: string;
+  image: ImageData | null | undefined;
   letter: string;
 }
 
 const CategoryItem = ({ name, slug, image, letter }: CategoryItemProps) => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "";
-  const imageUrl = image ? `${baseUrl}/uploads/${image}` : null;
+  // Ya no necesitamos baseUrl porque tenemos la URL completa de Cloudinary
+  const imageUrl = image?.url || "";
 
   return (
     <Link
