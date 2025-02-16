@@ -20,23 +20,17 @@ const Navbar = () => {
   return (
     <div className="w-full flex items-center justify-between px-2 border-b">
       <Link href="/" className="text-xl font-bold">
-        Huellas Digital
+        Huellas Pet Center
       </Link>
       <NavigationMenu className="px-4 py-3 w-full">
         <NavigationMenuList className="max-w-7xl flex justify-between items-center w-full">
           <NavigationMenuItem></NavigationMenuItem>
 
           <div className="flex items-center space-x-4">
-            <div className="relative border border-input rounded-lg flex items-center">
+            <div className="relative border border-collapse rounded-lg flex items-center">
               <Input placeholder="Buscar productos..." className="w-64 pl-10" />
               <Search className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
             </div>
-
-            {/* <Button variant="ghost" size="icon" asChild>
-              <Link href="/cart">
-                <ShoppingCart className="h-5 w-5" />
-              </Link>
-            </Button> */}
 
             <CartIcon />
 

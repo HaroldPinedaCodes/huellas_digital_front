@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Minus, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/store";
+import { useCart } from "@/store/index";
 import { CartItem as TCartItem } from "@/types/product";
 
 interface CartItemProps {

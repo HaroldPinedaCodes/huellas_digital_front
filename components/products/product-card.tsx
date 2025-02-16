@@ -62,7 +62,7 @@ export function ProductCard({
             </div>
             <div className="flex gap-2">
               {isLowStock && (
-                <span className="bg-yellow-500 text-white text-xs px-2 py-1 rounded">
+                <span className="bg-secondary-500 text-white text-xs px-2 py-1 rounded">
                   ¡Últimas unidades!
                 </span>
               )}
@@ -142,7 +142,7 @@ export function ProductCard({
                 className={`${
                   isOutOfStock || itemInCart
                     ? "cursor-not-allowed"
-                    : "bg-green-600 hover:bg-green-700"
+                    : "bg-primary-500 text-white hover:bg-primary-700"
                 }`}
                 size="sm"
               >

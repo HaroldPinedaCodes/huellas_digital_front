@@ -47,7 +47,7 @@ export function Header({ data }: Readonly<HeaderProps>) {
     >
       {/* Top bar - opcional */}
       {!isScrolled && (
-        <div className="bg-primary text-primary-foreground py-1 text-center text-sm">
+        <div className="bg-primary-400   text-white py-1 text-center text-sm">
           Envío gratis en pedidos superiores a $50.000
         </div>
       )}
@@ -56,7 +56,7 @@ export function Header({ data }: Readonly<HeaderProps>) {
       <div className="container mx-auto">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-8">
-            <Logo text="Huella Digital" />
+            <Logo text="Huellas pet center" />
 
             {/* Navigation - Desktop */}
             <nav className="hidden md:flex items-center space-x-6">
@@ -82,7 +82,7 @@ export function Header({ data }: Readonly<HeaderProps>) {
           </div>
 
           {/* Search and Actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4  rounded-lg p-1">
             {/* Search - Desktop */}
             <div className="relative hidden md:block">
               <Input
@@ -97,22 +97,26 @@ export function Header({ data }: Readonly<HeaderProps>) {
               <Button variant="ghost" size="icon" className="hover:bg-gray-100">
                 <Link href="/cart">
                   <div className="relative">
-                    <ShoppingCart className="h-5 w-5" />
-                    <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                    <ShoppingCart className="h-5 w-5 text-black" />
+                    <span className="text-white absolute -top-2 -right-2 bg-primary text-xs rounded-full w-4 h-4 flex items-center justify-center">
                       0
                     </span>
                   </div>
                 </Link>
               </Button>
 
-              <Button variant="ghost" size="icon" className="hover:bg-gray-100">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="border border-gray-200 shadow-sm hover:bg-gray-100"
+              >
                 <Link href="/account">
-                  <User className="h-5 w-5" />
+                  <User className="h-5 w-5 text-black" />
                 </Link>
               </Button>
 
               <Link href={ctaButton.url}>
-                <Button className="hidden md:inline-flex">
+                <Button className="hidden md:inline-flex text-white">
                   {ctaButton.text}
                 </Button>
               </Link>
@@ -163,7 +167,9 @@ export function Header({ data }: Readonly<HeaderProps>) {
               Servicios
             </Link>
             <Link href={ctaButton.url}>
-              <Button className="w-full mt-2">{ctaButton.text}</Button>
+              <Button className="w-full mt-2 text-white">
+                {ctaButton.text}
+              </Button>
             </Link>
           </div>
         </nav>

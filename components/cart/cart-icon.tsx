@@ -12,7 +12,7 @@ export function CartIcon() {
     <Button
       variant="ghost"
       size="icon"
-      className="relative"
+      className="relative bg-primary-foreground text-primary"
       onClick={() => setIsOpen(true)}
     >
       <ShoppingBag className="h-5 w-5" />

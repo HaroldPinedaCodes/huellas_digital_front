@@ -5,7 +5,6 @@ interface ImageData {
   url: string;
   id: number;
   name: string;
-  // ... otros campos opcionales
 }
 
 interface CategoryItemProps {
@@ -16,32 +15,56 @@ interface CategoryItemProps {
 }
 
 const CategoryItem = ({ name, slug, image, letter }: CategoryItemProps) => {
-  // Ya no necesitamos baseUrl porque tenemos la URL completa de Cloudinary
   const imageUrl = image?.url || "";
 
   return (
     <Link
       href={`/category/${slug}`}
-      className="group flex flex-col items-center p-2 transition-all hover:scale-105"
+      className="category-item relative flex min-w-[150px] flex-col items-center rounded-lg p-4 transition-all hover:bg-primary/5"
+      role="listitem"
+      aria-label={`Categoría: ${name}`}
     >
-      <div className="relative w-16 h-16 mb-2">
+      <div className="relative mb-3 flex items-center border-none justify-center">
         {imageUrl ? (
-          <Image
-            src={imageUrl}
-            alt={name}
-            width={64}
-            height={64}
-            className="rounded-full object-cover shadow-sm group-hover:shadow-md transition-shadow"
-          />
+          <div className="relative h-32 w-32 overflow-hidden rounded-xl">
+            <Image
+              src={imageUrl}
+              alt={name}
+              fill
+              className="object-cover transition-transform duration-300 bg-white"
+              style={{
+                transform: "scale(1)",
+              }}
+              sizes="(max-width: 128px) 100vw, 128px"
+            />
+            <div className="absolute inset-0 rounded-xl ring-1 ring-inset ring-black/10" />
+          </div>
         ) : (
-          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-            <span className="text-xl font-semibold text-primary">{letter}</span>
+          <div className="relative flex h-32 w-32 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10">
+            <span className="text-3xl font-semibold text-primary">
+              {letter}
+            </span>
+            <div className="absolute inset-0 rounded-xl ring-1 ring-inset ring-black/10" />
           </div>
         )}
       </div>
-      <span className="text-sm text-center font-medium group-hover:text-primary transition-colors">
+
+      <span className="text-center font-medium text-gray-700 line-clamp-2 transition-colors">
         {name}
       </span>
+
+      {/* Overlay para el hover */}
+      <div className="absolute inset-0 rounded-lg transition-colors hover:bg-primary/5">
+        <div className="h-full w-full">
+          {imageUrl && (
+            <div className="absolute top-4 left-4 right-4 bottom-4 overflow-hidden">
+              <div className="h-32 w-32 mx-auto">
+                <div className="h-full w-full transform transition-transform duration-300 hover:scale-110" />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </Link>
   );
 };

@@ -8,6 +8,7 @@ import { HeroSection } from "@/components/custom/hero-section";
 import { FeatureSection } from "@/components/custom/features-section";
 import { getHomePageData } from "@/data/loaders";
 import type { Block } from "@/types/blocks";
+import Hero3 from "@/components/custom/hero3";
 
 function BlockRenderer({ block }: { block: Block }) {
   switch (block.__component) {
@@ -46,9 +47,11 @@ export default async function Home() {
   return (
     <main>
       {/* Hero siempre visible primero */}
-      {blocks[0]?.__component === "layout.hero-section" && (
+      {/* {blocks[0]?.__component === "layout.hero-section" && (
         <HeroSection data={blocks[0]} />
-      )}
+      )} */}
+
+      <Hero3 />
 
       <div className="max-w-7xl mx-auto px-4">
         {/* Secciones estáticas */}

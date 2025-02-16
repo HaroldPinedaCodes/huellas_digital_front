@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { CartSheet } from "@/components/cart/cart-sheet";
 import { Header } from "@/components/custom/header";
 import { ThemeProvider } from "next-themes";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
 import { Footer } from "@/components/custom/footer";
 // import Navbar from "@/components/ui/layout/Navbar";
@@ -60,17 +61,19 @@ export default async function RootLayout({
           )}
         >
           <ThemeProvider
-            defaultTheme="system"
+            defaultTheme="light"
             disableTransitionOnChange
             attribute="class"
           >
-            <main className="relative flex flex-col min-h-screen bg-white">
-              <Header data={globalData.data.header} />
-              <CartSheet />
-              {/* <Navbar /> */}
-              {children}
+            <ReactQueryProvider>
+              <main className="relative flex flex-col flex-grow min-h-screen bg-white">
+                <Header data={globalData.data.header} />
+                <CartSheet />
+                {/* <Navbar /> */}
+                {children}
+              </main>
               <Footer data={globalData.data.footer} />
-            </main>
+            </ReactQueryProvider>
           </ThemeProvider>
           <Toaster />
         </body>

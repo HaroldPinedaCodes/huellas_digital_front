@@ -39,11 +39,28 @@ export const hasErrorInput = [
   "ring-red-200 dark:ring-red-700/30",
 ];
 
+// export function getStrapiURL(path = "") {
+//   const baseURL =
+//     process.env.NEXT_PUBLIC_STRAPI_UPLOAD_URL || "http://localhost:1337";
+//   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+//   return `${baseURL}${normalizedPath}`;
+// }
+
 export function getStrapiURL(path = "") {
   const baseURL =
-    process.env.NEXT_PUBLIC_STRAPI_UPLOAD_URL || "http://localhost:1337";
+    process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
+  // Eliminar barra diagonal final si existe
+  const normalizedBaseURL = baseURL.endsWith("/")
+    ? baseURL.slice(0, -1)
+    : baseURL;
+  // Asegurar que el path comience con barra diagonal
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  return `${baseURL}${normalizedPath}`;
+
+  console.log("Base URL:", normalizedBaseURL);
+  console.log("Path:", normalizedPath);
+  console.log("Final URL:", `${normalizedBaseURL}${normalizedPath}`);
+
+  return `${normalizedBaseURL}${normalizedPath}`;
 }
 
 export function getStrapiMedia(url: string | null) {
